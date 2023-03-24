@@ -41,6 +41,7 @@ body {
   width: calc(300px);
   border-bottom: 5px solid rgb(1, 68, 12);
   transform-origin: top;
+  z-index: 9999;
 }
 
 .board__line--vertical {
