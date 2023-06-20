@@ -1,4 +1,4 @@
-import {Circle, X} from "@phosphor-icons/react";
+import { Circle, X } from "@phosphor-icons/react";
 
 import { useEffect, useState } from "react";
 import "./App.css";
@@ -13,6 +13,9 @@ type WinnerProps = CombinationProps & {
 function App() {
   const [gameData, setGameData] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [isPlayerOne, setIsPlayerOne] = useState(true);
+  const [playerOne, setPlayerOne] = useState("");
+  const [playerTwo, setPlayerTwo] = useState("");
+  const [hasName, setHasName] = useState(false);
   const [winner, setWinner] = useState<WinnerProps>();
   const winningCombinations = [
     //HORIZ
@@ -24,10 +27,8 @@ function App() {
     { combination: [1, 4, 7], orientation: "V" },
     //DIAG
     { combination: [0, 4, 8], orientation: "D" },
-    { combination: [2, 4, 6], orientation: "DR" },
+    { combination: [2, 4, 6], orientation: "DR" }
   ];
-
-
 
   const checkWinner = () => {
     for (let values of winningCombinations) {
@@ -39,11 +40,10 @@ function App() {
         ) {
           const newWinner = {
             ...values,
-            player: "player1",
+            player: playerOne
           } as WinnerProps;
 
           setWinner(newWinner);
-
         }
         if (
           gameData[values.combination[0]] === 2 &&
@@ -52,10 +52,9 @@ function App() {
         ) {
           const newWinner = {
             ...values,
-            player: "player2",
+            player: playerTwo
           } as WinnerProps;
           setWinner(newWinner);
-        
         }
       }
     }
@@ -81,9 +80,8 @@ function App() {
   };
 
   const checkLineOrientation = (index: number) => {
+    console.log("WINNER", winner);
 
-      console.log("WINNER",winner);
-    
     switch (winner?.orientation) {
       case "V":
         return winner.combination.includes(index)
@@ -106,12 +104,14 @@ function App() {
     }
   };
 
+  function handleSaveNames() {
+    if (playerOne !== "" && playerTwo !== "") {
+      setHasName(true);
+    }
+  }
   useEffect(() => {
     checkWinner();
-    if (
-      gameData.every((item) => item !== 0) &&
-      winner?.player
-    ) {
+    if (gameData.every((item) => item !== 0) && winner?.player) {
       alert("ACABOU");
     }
   }, [gameData]);
@@ -123,20 +123,56 @@ function App() {
   }, [winner]);
 
   return (
-    <div className="board">
-      {gameData.map((el, index) => (
-        <span
-          className="board__item"
-          key={index}
-          onClick={() => {
-            handleClick(index);
-          }}
-        >
-          {el !== 0 ? (el === 1 ? <X size={32} />: <Circle size={32} />) : " "}
+    <div>
+      {!hasName && (
+        <div className="names">
+          <input
+            type="text"
+            placeholder="Jogador 1"
+            onChange={(value) => setPlayerOne(value.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Jogador 2"
+            onChange={(value) => setPlayerTwo(value.target.value)}
+          />
+          <button type="button" onClick={handleSaveNames}>
+            Salvar
+          </button>
+        </div>
+      )}
 
-          {winner && <div className={`${checkLineOrientation(index)}`} />}
-        </span>
-      ))}
+      {hasName && (
+        <div className="board">
+          {gameData.map((el, index) => (
+            <span
+              className="board__item"
+              key={index}
+              onClick={() => {
+                handleClick(index);
+              }}
+            >
+              {el !== 0 ? (
+                el === 1 ? (
+                  <X size={32} />
+                ) : (
+                  <Circle size={32} />
+                )
+              ) : (
+                " "
+              )}
+
+              {winner && <div className={`${checkLineOrientation(index)}`} />}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {winner?.player && (
+        <div className="winner-message">
+          {`O vencedor foi o ${winner.player}`}
+        </div>
+      )}
     </div>
   );
 }

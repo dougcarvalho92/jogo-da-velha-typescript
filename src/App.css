@@ -56,3 +56,8 @@ body {
 .board__line--diagonal.reverse {
   transform: rotate(-45deg);
 }
+.winner-message{
+  text-align: center;
+  margin-top: 50px;
+  font-size: 35px;
+}

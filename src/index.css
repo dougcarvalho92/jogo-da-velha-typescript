@@ -11,3 +11,36 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+input, button {
+  height: 40px;
+  border: none;
+  flex: 1;
+  padding: 0px 8px;
+  border-radius: 10px;
+}
+
+input {
+  background-color: #d4d4d4;
+}
+
+button {
+  background-color: #3e0cc7;
+  border-radius: 10px;
+  color: #fff;
+}
+button:hover{
+  background-color: #240774;
+}
+
+input::placeholder {
+  opacity: 0.5;
+}
+
+.names {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+
+}
